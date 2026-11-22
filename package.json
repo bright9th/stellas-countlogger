@@ -1,0 +1,31 @@
+{
+  "name": "stellas-countlogger",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Stella Sora discord server count logging viewer",
+  "keywords": [],
+  "license": "MIT",
+  "author": "BrightNighter",
+  "type": "module",
+  "homepage": "https://bright9th.github.io/stellas-countlogger",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "format": "prettier --write \"src/**/*.{ts,json,css,md}\"",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "pixi.js": "^8.22.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.14.0",
+    "gh-pages": "^6.3.0",
+    "globals": "^17.14.0",
+    "prettier": "^3.9.10",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.72.2",
+    "vite": "^8.3.6"
+  }
+}
