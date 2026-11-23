@@ -1,10 +1,11 @@
 export default async function () {
+  const targetPoints = 250;
+
   return globalThis.App.db!.query({
-    queryType: "get_modulo_id_rows",
+    queryType: "get_timestamp_sampled_rows",
     params: {
       table_name: "messages",
-      modulo: 67,
-      limit: 69,
+      target_count: targetPoints,
     },
   });
 }

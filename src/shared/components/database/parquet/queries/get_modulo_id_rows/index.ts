@@ -1,9 +1,10 @@
 import type { QueryIndex, QueryPredicateResult } from "../type";
+import type { QueryParamOption } from "../typeExtend";
 import query from "./query.sql?raw";
 import type { GetModuloIdRowsData, GetModuloIdRowsParam } from "./type";
 
 const index: QueryIndex = {
-  queryPredicate: async (connection, queryParam: GetModuloIdRowsParam) => {
+  queryPredicate: async (connection, queryParam: QueryParamOption) => {
     if (queryParam.queryType !== "get_modulo_id_rows")
       return { result: "skipped", data: null };
 

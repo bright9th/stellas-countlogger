@@ -1,7 +1,8 @@
 import type { QueryIndex, QueryPredicateIndex } from "./type";
 import get_modulo_id_rows from "./get_modulo_id_rows";
+import get_timestamp_sampled_rows from "./get_timestamp_sampled_rows";
 
-const index: QueryIndex[] = [get_modulo_id_rows];
+const index: QueryIndex[] = [get_modulo_id_rows, get_timestamp_sampled_rows];
 
 export const queryIndex: QueryPredicateIndex = async (
   connection,
