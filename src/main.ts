@@ -10,11 +10,13 @@
 import globals from "./shared/components/globals";
 await globals.init();
 
-const result = await globalThis.App.db!.connection.query(`
-  SELECT *
-  FROM read_parquet('messages.parquet')
-  LIMIT 1000
-`);
+const result = await globalThis.App.db!.query({
+  queryType: "get_modulo_id_rows",
+  params: {
+    table_name: "messages",
+    modulo: 67,
+    limit: 69,
+  },
+});
 
-const rows = result.toArray().map((row) => row.toJSON());
-console.log(rows);
+console.log(result);

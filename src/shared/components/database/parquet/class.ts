@@ -1,5 +1,7 @@
 import * as duckdb from "@duckdb/duckdb-wasm";
 import { err, log } from "../../../log";
+import type { QueryData, QueryParamOption } from "./queries/typeExtend";
+import { queryIndex } from "./queries";
 
 export class DatabaseClient {
   #initialized: boolean = false;
@@ -73,5 +75,17 @@ export class DatabaseClient {
       );
       return false;
     }
+  }
+
+  async query<T extends QueryParamOption>(
+    queryParam: T
+  ): Promise<QueryData<T> | null> {
+    const result = await queryIndex(this.#connection, queryParam);
+    if (result.result === "failed") {
+      err("[DATABASE:QUERY]", "Error:", ...result.reasons);
+      return null;
+    }
+    log("[DATABASE:QUERY]", "Success for type:", queryParam.queryType);
+    return result.data;
   }
 }
