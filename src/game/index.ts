@@ -1,16 +1,29 @@
 import { Application, Container } from "pixi.js";
 import { COLORS } from "../shared/constants/colors";
+import { LoadingScene } from "./loadingScene";
+import { MainScene } from "./mainScene";
 
 export class Game {
-  public app: Application;
-  public container!: Container;
-
-  constructor() {
-    this.app = new Application();
+  #initialized: boolean = false;
+  #app: Application;
+  get app() {
+    return this.#app;
+  }
+  #container!: Container; // for resizing
+  get container() {
+    return this.#container;
   }
 
-  public async init(): Promise<void> {
-    await this.app.init({
+  #currentScene!: Container; // TODO make scene manager
+
+  constructor() {
+    this.#app = new Application();
+  }
+
+  async init(): Promise<void> {
+    if (this.#initialized) return;
+
+    await this.#app.init({
       resizeTo: window,
       background: COLORS.background,
       antialias: true,
@@ -18,12 +31,35 @@ export class Game {
       autoDensity: true,
     });
 
-    this.container = new Container();
-    this.app.stage.addChild(this.container);
+    this.#container = new Container();
+    this.#app.stage.addChild(this.#container);
 
-    this.app.ticker.maxFPS = 60;
-    // this.app.ticker.add((ticker) => {
-    //   this.mainScene.update(ticker);
-    // });
+    const loadingScene = (this.#currentScene = new LoadingScene());
+    this.#container.addChild(loadingScene);
+
+    this.#app.ticker.maxFPS = 60;
+    this.#app.ticker.add((ticker) => {
+      loadingScene.update(ticker);
+    });
+
+    this.#initialized = true;
+  }
+
+  start(): void {
+    this.#container.removeChild(this.#currentScene);
+
+    const mainScene = (this.#currentScene = new MainScene());
+    this.#container.addChild(mainScene);
+
+    this.setBackgroundColor(COLORS.foreground);
+
+    this.#app.ticker.add((ticker) => {
+      mainScene.update(ticker);
+    });
+  }
+
+  setBackgroundColor(value: number | "default"): void {
+    this.#app.renderer.background.color =
+      value === "default" ? COLORS.background : value;
   }
 }
