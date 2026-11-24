@@ -2,6 +2,7 @@ import { Application, Container } from "pixi.js";
 import { COLORS } from "../shared/constants/colors";
 import { LoadingScene } from "./loadingScene";
 import { MainScene } from "./mainScene";
+import type { CContainer } from "../shared/components/pixijs/Container";
 
 export class Game {
   #initialized: boolean = false;
@@ -14,7 +15,7 @@ export class Game {
     return this.#container;
   }
 
-  #currentScene!: Container; // TODO make scene manager
+  #currentScene!: CContainer; // TODO make scene manager
 
   constructor() {
     this.#app = new Application();
@@ -38,24 +39,21 @@ export class Game {
     this.#container.addChild(loadingScene);
 
     this.#app.ticker.maxFPS = 60;
-    this.#app.ticker.add((ticker) => {
-      loadingScene.update(ticker);
-    });
+    this.#app.ticker.add(loadingScene.update, loadingScene);
 
     this.#initialized = true;
   }
 
   start(): void {
     this.#container.removeChild(this.#currentScene);
+    this.#app.ticker.remove(this.#currentScene.update, this.#currentScene); // TODO make custom class extends Container
 
     const mainScene = (this.#currentScene = new MainScene());
     this.#container.addChild(mainScene);
 
     this.setBackgroundColor(COLORS.foreground);
 
-    this.#app.ticker.add((ticker) => {
-      mainScene.update(ticker);
-    });
+    this.#app.ticker.add(mainScene.update, mainScene);
   }
 
   setBackgroundColor(value: number | "default"): void {

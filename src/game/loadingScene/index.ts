@@ -1,7 +1,8 @@
-import { Container, Graphics, Ticker } from "pixi.js";
+import { Graphics, Ticker } from "pixi.js";
 import { COLORS } from "../../shared/constants/colors";
+import { CContainer } from "../../shared/components/pixijs/Container";
 
-export class LoadingScene extends Container {
+export class LoadingScene extends CContainer {
   #player: Graphics;
 
   constructor() {
@@ -14,15 +15,9 @@ export class LoadingScene extends Container {
     this.#player.position.set(640, 360);
 
     this.addChild(this.#player);
-
-    this.onUpdate = this.onUpdate.bind(this);
   }
 
-  private onUpdate(ticker: Ticker): void {
+  protected override onUpdate(ticker: Ticker): void {
     this.#player.rotation += 0.02 * ticker.deltaTime;
-  }
-
-  update(ticker: Ticker): void {
-    this.onUpdate(ticker);
   }
 }

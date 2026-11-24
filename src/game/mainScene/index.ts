@@ -1,8 +1,8 @@
-import { Container, Ticker } from "pixi.js";
 import testGetMessages from "./testGetMessages";
 import { CountGraph } from "./countGraph";
+import { CContainer } from "../../shared/components/pixijs/Container";
 
-export class MainScene extends Container {
+export class MainScene extends CContainer {
   #graph = new CountGraph();
 
   constructor() {
@@ -16,12 +16,5 @@ export class MainScene extends Container {
   async #loadData(): Promise<void> {
     const rows = await testGetMessages();
     this.#graph.setData(rows);
-  }
-
-  private onUpdate(): void {}
-
-  update(ticker: Ticker): void {
-    void ticker;
-    this.onUpdate();
   }
 }
