@@ -3,6 +3,7 @@ import { COLORS } from "../shared/constants/colors";
 import { LoadingScene } from "./loadingScene";
 import { MainScene } from "./mainScene";
 import type { CContainer } from "../shared/components/pixijs/Container";
+import { DESIGN_HEIGHT, DESIGN_WIDTH } from "../shared/constants/canvas";
 
 export class Game {
   #initialized: boolean = false;
@@ -13,6 +14,26 @@ export class Game {
   #container!: Container; // for resizing
   get container() {
     return this.#container;
+  }
+  get topLeftPosition() {
+    const { x, y, scale } = globalThis.App.game!.container;
+    return {
+      x: -x / scale.x,
+      y: -y / scale.y,
+    };
+  }
+  get bottomRightPosition() {
+    const topLeftPosition = this.topLeftPosition;
+    return {
+      x: DESIGN_WIDTH - topLeftPosition.x,
+      y: DESIGN_HEIGHT - topLeftPosition.y,
+    };
+  }
+  get worldSize() {
+    return {
+      x: this.bottomRightPosition.x - this.topLeftPosition.x,
+      y: this.bottomRightPosition.y - this.topLeftPosition.y,
+    };
   }
 
   #currentScene!: CContainer; // TODO make scene manager
@@ -50,8 +71,6 @@ export class Game {
 
     const mainScene = (this.#currentScene = new MainScene());
     this.#container.addChild(mainScene);
-
-    this.setBackgroundColor(COLORS.foreground);
 
     this.#app.ticker.add(mainScene.update, mainScene);
   }
