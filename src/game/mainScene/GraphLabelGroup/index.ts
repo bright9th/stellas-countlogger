@@ -43,29 +43,29 @@ export class GraphLabelGroup extends Container {
 
     this.#initAnimation();
     this.update();
-
-    setInterval(
-      () => this.setTimeDetailText("A".repeat(Math.round(Math.random() * 10))),
-      500
-    );
   }
 
   #initAnimation() {
-    const topLeftPosition = globalThis.App.game!.topLeftPosition;
-    const worldSize = globalThis.App.game!.worldSize;
-    const timeGroupCentreX = topLeftPosition.x + worldSize.x / 2;
-    const timeGroupCentreY =
-      topLeftPosition.y + worldSize.y - PANEL_PADDING / 2;
-
     this.#timeTextPositionAnimator.setFunc((startValue, targetValue, t) => {
       const current = MathUtils.lerp(startValue, targetValue, Easing.out(t));
+      const topLeftPosition = globalThis.App.game!.topLeftPosition;
+      const worldSize = globalThis.App.game!.worldSize;
+      const timeGroupCentreY =
+        topLeftPosition.y + worldSize.y - PANEL_PADDING / 2;
       this.#timeText.position.set(current, timeGroupCentreY);
       return current;
     });
+    const topLeftPosition = globalThis.App.game!.topLeftPosition;
+    const worldSize = globalThis.App.game!.worldSize;
+    const timeGroupCentreX = topLeftPosition.x + worldSize.x / 2;
     this.#timeTextPositionAnimator.setStartValue(timeGroupCentreX);
 
     this.#timeDetailPositionAnimator.setFunc((startValue, targetValue, t) => {
       const current = MathUtils.lerp(startValue, targetValue, Easing.out(t));
+      const topLeftPosition = globalThis.App.game!.topLeftPosition;
+      const worldSize = globalThis.App.game!.worldSize;
+      const timeGroupCentreY =
+        topLeftPosition.y + worldSize.y - PANEL_PADDING / 2;
       this.#timeDetailGroup.position.set(current, timeGroupCentreY);
       return current;
     });
